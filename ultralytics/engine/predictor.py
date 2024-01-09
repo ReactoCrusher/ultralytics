@@ -44,6 +44,8 @@ from ultralytics.utils.checks import check_imgsz, check_imshow
 from ultralytics.utils.files import increment_path
 from ultralytics.utils.torch_utils import select_device, smart_inference_mode
 
+VIDEO_WRITER_CLASS = cv2.VideoWriter().__class__
+
 STREAM_WARNING = """
 WARNING ⚠️ inference results will accumulate in RAM unless `stream=True` is passed, causing potential out-of-memory
 errors for large sources or long-running streams and videos. See https://docs.ultralytics.com/modes/predict/ for help.
@@ -301,7 +303,7 @@ class BasePredictor:
                     LOGGER.info(f'{s}{profilers[1].dt * 1E3:.1f}ms')
 
         # Release assets
-        if isinstance(self.vid_writer[-1], cv2.VideoWriter):
+        if isinstance(self.vid_writer[-1], VIDEO_WRITER_CLASS):
             self.vid_writer[-1].release()  # release final video writer
 
         # Print results
